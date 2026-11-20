@@ -1,54 +1,57 @@
+﻿; Shared code for TeamTalk File Generator.
+; Do not run or compile this file directly: run or compile english.ahk or portugues.ahk,
+; which set the interface texts (T_*) and then include this file.
 #SingleInstance Force
 SetWorkingDir %A_ScriptDir%
 
 Gui +LastFound
-Gui, Add, Text, x10 y10, Server name:
+Gui, Add, Text, x10 y10, %T_ServerName%
 Gui, Add, Edit, x150 y10 w200 vttname
 
-Gui, Add, Text, x10 y40, Server address:
+Gui, Add, Text, x10 y40, %T_ServerAddress%
 Gui, Add, Edit, x150 y40 w200 vttaddress
 
-Gui, Add, Text, x10 y70, TCP port:
+Gui, Add, Text, x10 y70, %T_TcpPort%
 Gui, Add, Edit, x150 y70 w200 vtcpport, 10333
 
-Gui, Add, Text, x10 y100, UDP port:
+Gui, Add, Text, x10 y100, %T_UdpPort%
 Gui, Add, Edit, x150 y100 w200 vudpport, 10333
 
-Gui, Add, Text, x10 y130, Encrypted server
+Gui, Add, Text, x10 y130, %T_Encrypted%
 Gui, Add, CheckBox, x150 y130 vencrypted
 
-Gui, Add, Text, x10 y160, Username:
+Gui, Add, Text, x10 y160, %T_Username%
 Gui, Add, Edit, x150 y160 w200 vusername
 
-Gui, Add, Text, x10 y190, Password:
+Gui, Add, Text, x10 y190, %T_Password%
 Gui, Add, Edit, x150 y190 w170 vpassword Password
-Gui, Add, Button, x330 y187 w50 h20 gTogglePass1 vPassBtn1, Show
+Gui, Add, Button, x330 y187 w50 h20 gTogglePass1 vPassBtn1, %T_Show%
 
-Gui, Add, Text, x10 y220, Nickname (optional):
+Gui, Add, Text, x10 y220, %T_Nickname%
 Gui, Add, Edit, x150 y220 w200 vnickname
 
-Gui, Add, Text, x10 y250, Channel (optional):
+Gui, Add, Text, x10 y250, %T_Channel%
 Gui, Add, Edit, x150 y250 w200 vchannel
 
-Gui, Add, Text, x10 y280, Channel password:
+Gui, Add, Text, x10 y280, %T_ChannelPassword%
 Gui, Add, Edit, x150 y280 w170 vchannelpass Password
-Gui, Add, Button, x330 y277 w50 h20 gTogglePass2 vPassBtn2, Show
+Gui, Add, Button, x330 y277 w50 h20 gTogglePass2 vPassBtn2, %T_Show%
 
-Gui, Add, Button, x150 y320 w100 gGenerate, Generate file
-Gui, Add, Button, x260 y320 w100 gCancel, Cancel
+Gui, Add, Button, x150 y320 w100 gGenerate, %T_Generate%
+Gui, Add, Button, x260 y320 w100 gCancel, %T_Cancel%
 
-Gui, Show, w400 h360, TeamTalk file generator
+Gui, Show, w400 h360, %T_Title%
 return
 
 TogglePass1:
 GuiControlGet, currentText,, PassBtn1
 Gui, Submit, NoHide
-if (currentText = "Show") {
+if (currentText = T_Show) {
     GuiControl, -Password, password
-    GuiControl,, PassBtn1, Hide
+    GuiControl,, PassBtn1, %T_Hide%
 } else {
     GuiControl, +Password, password
-    GuiControl,, PassBtn1, Show
+    GuiControl,, PassBtn1, %T_Show%
 }
 GuiControl,, password, %password%
 return
@@ -56,12 +59,12 @@ return
 TogglePass2:
 GuiControlGet, currentText,, PassBtn2
 Gui, Submit, NoHide
-if (currentText = "Show") {
+if (currentText = T_Show) {
     GuiControl, -Password, channelpass
-    GuiControl,, PassBtn2, Hide
+    GuiControl,, PassBtn2, %T_Hide%
 } else {
     GuiControl, +Password, channelpass
-    GuiControl,, PassBtn2, Show
+    GuiControl,, PassBtn2, %T_Show%
 }
 GuiControl,, channelpass, %channelpass%
 return
@@ -69,12 +72,12 @@ return
 Generate:
 Gui, Submit
 if (!ttname || !ttaddress || !tcpport || !udpport || !username) {
-    MsgBox, 48, Error, Please fill in all required fields!
+    MsgBox, 48, %T_Error%, %T_FillRequired%
     Gui, Show
     return
 }
 
-FileSelectFile, filename, S16, , Save, TeamTalk Host Settings (*.tt)
+FileSelectFile, filename, S16, , %T_Save%, TeamTalk Host Settings (*.tt)
 if (filename = "")
     return
 
@@ -114,7 +117,7 @@ content .= "</teamtalk>`r`n"
 FileDelete, %filename%
 FileAppend, %content%, %filename%, UTF-8
 
-MsgBox, 64, Success, File generated successfully.
+MsgBox, 64, %T_Success%, %T_Generated%
 ExitApp
 return
 
